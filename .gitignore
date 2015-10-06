@@ -1,0 +1,56 @@
+# Ignore individuals .gitignores!
+error.log
+
+# Build directories #
+build/
+bin/
+log/
+target/
+out/
+
+# SBT #
+project/target/
+project/project/target/
+
+# Vagrant #
+.vagrant/
+
+# Java #
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+*.db
+
+######################
+# Windows
+######################
+
+# Windows image file caches
+Thumbs.db
+
+# Folder config file
+Desktop.ini
+
+######################
+# OSX
+######################
+
+.DS_Store
+
+# Thumbnails
+._*
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
+
+######################
+# IntelliJ
+######################
+*.iml
+*.iws
+.idea/
