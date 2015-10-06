@@ -1,25 +1,23 @@
 package filesender
 
+import java.io.IOException
 import scalafx.Includes._
 import scalafx.application.JFXApp
+import scalafx.application.JFXApp.PrimaryStage
 import scalafx.scene.Scene
-import scalafx.scene.paint.Color
-import scalafx.scene.shape.Rectangle
+import scalafxml.core.{NoDependencyResolver, FXMLView}
 
 object Main extends JFXApp {
-  stage = new JFXApp.PrimaryStage {
+
+  val resource = getClass.getResource("/Main.fxml")
+  if (resource == null) {
+    throw new IOException("Cannot load resource: /Main.fxml")
+  }
+
+  val root = FXMLView(resource, NoDependencyResolver)
+
+  stage = new PrimaryStage {
     title.value = "Hello Stage"
-    width = 600
-    height = 450
-    scene = new Scene {
-      fill = Color.LightGreen
-      content = new Rectangle {
-        x = 25
-        y = 40
-        width = 100
-        height = 100
-        fill <== when (hover) choose Color.Green otherwise Color.Red
-      }
-    }
+    scene = new Scene(root)
   }
 }
