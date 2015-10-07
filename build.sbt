@@ -21,4 +21,4 @@ testOptions += Tests.Argument(TestFrameworks.JUnit, "-v")
 
 addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0-M5" cross CrossVersion.full)
 
-fork in run := true
+fork := true
