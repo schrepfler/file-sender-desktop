@@ -1,6 +1,8 @@
 package filesender
 
 import akka.actor._
+import scala.concurrent.duration._
+import scala.language.postfixOps
 
 import scalafx.application.{Platform, JFXApp}
 import scalafx.application.JFXApp.PrimaryStage
@@ -14,6 +16,11 @@ object FileSenderApp extends JFXApp {
   val main = system.actorOf(Props(classOf[FileSenderAppActor], stage).withDispatcher("javafx-dispatcher"), "main-actor")
   val terminator = system.actorOf(Props(classOf[Terminator], main).withDispatcher("javafx-dispatcher"), "app-terminator")
 
+  // Send a message from outside the JavaFX Application Thread!!
+  import system.dispatcher //Import implicit default execution context
+  system.scheduler.scheduleOnce(5 seconds){
+    main ! ChangeMainLabel("Time's up!")
+  }
 }
 
 case class CloseAppCommand()
@@ -21,16 +28,19 @@ case class CloseAppCommand()
 class FileSenderAppActor(stage: PrimaryStage) extends Actor with ActorLogging {
   val mainSceneContext = MainPresenterActor.sceneContext
   val mainPresenter = MainPresenterActor.actorOf(context, mainSceneContext)
+  stage.scene = mainSceneContext.scene
+  stage.show()
 
   def receive = {
-    case command: CloseAppCommand => {
+    case command: CloseAppCommand =>
       log.debug("Executing command CloseAppCommand")
       context.stop(self)
-    }
-    case unexpectedMessage: Any => {
+    case command: ChangeMainLabel =>
+      log.debug("Executing command ChangeMainLabel")
+      mainPresenter ! command
+    case unexpectedMessage: Any =>
       log.debug("Received unexpected message: {}", unexpectedMessage)
       throw new Exception("Can't handle %s".format(unexpectedMessage))
-    }
   }
 
 }

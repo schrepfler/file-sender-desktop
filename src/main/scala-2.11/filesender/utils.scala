@@ -3,11 +3,11 @@ package filesender
 import java.io.IOException
 import javafx.{scene => jfxs}
 
-import akka.actor.ActorContext
+import akka.actor.{ActorRef, ActorContext}
 
 import scalafx.Includes._
 import scalafx.scene.Scene
-import scalafxml.core.{FXMLLoader, NoDependencyResolver}
+import scalafxml.core.{DependenciesByType, FXMLLoader}
 
 
 case class SceneContext[T](scene: Scene, controller:T)
@@ -19,7 +19,7 @@ trait ProxyActorFactory[T] {
     if (resource == null) {
       throw new IOException("Cannot load resource:" + resource)
     }
-    val loader = new FXMLLoader(resource, NoDependencyResolver)
+    val loader = new FXMLLoader(resource, new DependenciesByType(Map()))
     loader.load()
     val root = loader.getRoot[jfxs.Parent]()
     val scene = new Scene(root)
@@ -27,5 +27,5 @@ trait ProxyActorFactory[T] {
     new SceneContext[T](scene, controller)
   }
 
-  def actorOf(actorContext: ActorContext, uiContext: SceneContext[T])
+  def actorOf(actorContext: ActorContext, uiContext: SceneContext[T]):ActorRef
 }
