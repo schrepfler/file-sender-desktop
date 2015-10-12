@@ -1,47 +1,67 @@
 package filesender
 
+import scalafx.beans.property.StringProperty
 import scalafx.event.ActionEvent
-import scalafx.scene.control.Label
+import scalafx.scene.control.{TableColumn, TableView}
 import scalafxml.core.macros.sfxml
 
 import akka.actor._
 
 
+class TaskRow(initialName: String, initialStatus: String) {
+  val name = StringProperty(initialName)
+  val status = StringProperty(initialStatus)
+}
+
 trait MainController {
-  def handleSubmit(event: ActionEvent): Unit
-  def setLabelText(text: String): Unit
-  def subscribeToSubmit(callback: Function[ActionEvent, Unit]): Unit
+  def handleLoad(event: ActionEvent): Unit
+  def handleSend(event: ActionEvent): Unit
+  def subscribeToLoad(callback: Function[ActionEvent, Unit]): Unit
+  def subscribeToSend(callback: Function[ActionEvent, Unit]): Unit
+  def addTaskRow(taskName: String, taskStatus: String): Unit
 }
 
 @sfxml
-class MainControllerImpl(private val helloLabel: Label) extends MainController {
-  private var _submitCallbacks = List[Function[ActionEvent, Unit]]()
+class MainControllerImpl(private val taskTable:TableView[TaskRow],
+                         private val taskNameColumn:TableColumn[TaskRow, String],
+                         private val taskStatusColumn:TableColumn[TaskRow, String]) extends MainController {
+  private var _loadCallbacks = List[Function[ActionEvent, Unit]]()
+  private var _sendCallbacks = List[Function[ActionEvent, Unit]]()
 
-  def subscribeToSubmit(callback: Function[ActionEvent, Unit]) = {
-    _submitCallbacks = callback :: _submitCallbacks
+  taskNameColumn.cellValueFactory = {_.value.name}
+  taskStatusColumn.cellValueFactory = {_.value.status}
+
+  def handleLoad(event: ActionEvent) = _loadCallbacks.foreach(_(event))
+
+  def handleSend(event: ActionEvent) = _sendCallbacks.foreach(_(event))
+
+  def subscribeToLoad(callback: Function[ActionEvent, Unit]) = {
+    _loadCallbacks = callback :: _loadCallbacks
   }
 
-  def setLabelText(text: String) = {
-    helloLabel.text = text
+  def subscribeToSend(callback: Function[ActionEvent, Unit]) = {
+    _sendCallbacks = callback :: _sendCallbacks
   }
 
-  def handleSubmit(event: ActionEvent) = _submitCallbacks.foreach(_(event))
+  def addTaskRow(taskName: String, taskStatus: String) = {
+    taskTable.items.getValue.add(new TaskRow(taskName, taskStatus))
+  }
 }
 
-case class ChangeMainLabel(newText: String)
+case class AddTaskRow(taskName: String, taskStatus: String)
 
 class MainPresenterActor(sceneContext: SceneContext[MainController]) extends Actor with ActorLogging {
   // Inbound
   def receive = {
-    case command: ChangeMainLabel =>
-      log.debug("Executing command ChangeMainLabel(newText:{})", command.newText)
-      sceneContext.controller.setLabelText(command.newText)
+    case command: AddTaskRow =>
+      log.debug("Executing command AddTaskRow(taskName:{}, taskStatus:{})", command.taskName, command.taskStatus)
+      sceneContext.controller.addTaskRow(command.taskName, command.taskStatus)
     case unexpectedMessage: Any =>
       log.debug("Received unexpected message: {}", unexpectedMessage)
       throw new Exception("Can't handle %s".format(unexpectedMessage))
   }
   // Outbound
-  sceneContext.controller.subscribeToSubmit(
+  sceneContext.controller.subscribeToSend(
     event => context.parent ! new CloseAppCommand()
   )
 }

@@ -19,7 +19,7 @@ object FileSenderApp extends JFXApp {
   // Send a message from outside the JavaFX Application Thread!!
   import system.dispatcher //Import implicit default execution context
   system.scheduler.scheduleOnce(5 seconds){
-    main ! ChangeMainLabel("Time's up!")
+    main ! AddTaskRow("Time's up!", "Sent")
   }
 }
 
@@ -35,7 +35,7 @@ class FileSenderAppActor(stage: PrimaryStage) extends Actor with ActorLogging {
     case command: CloseAppCommand =>
       log.debug("Executing command CloseAppCommand")
       context.stop(self)
-    case command: ChangeMainLabel =>
+    case command: AddTaskRow =>
       log.debug("Executing command ChangeMainLabel")
       mainPresenter ! command
     case unexpectedMessage: Any =>

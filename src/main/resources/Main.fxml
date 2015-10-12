@@ -1,28 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane fx:controller="filesender.MainControllerImpl"
-        maxHeight="-Infinity" maxWidth="-Infinity"
-        minHeight="-Infinity" minWidth="-Infinity"
-        prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="filesender.MainControllerImpl">
    <children>
-      <VBox prefHeight="400.0" prefWidth="600.0"
-            spacing="10.0"
-            AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox prefHeight="400.0" prefWidth="600.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
-         <children>
-            <Label fx:id="helloLabel" text="Hello world!" />
-            <Button onAction="#handleSubmit" mnemonicParsing="false" text="Close" />
-         </children>
          <padding>
             <Insets bottom="20.0" left="30.0" right="30.0" top="20.0" />
          </padding>
+         <children>
+            <AnchorPane prefHeight="34.0" prefWidth="540.0">
+               <children>
+                  <VBox prefHeight="200.0" prefWidth="540.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <HBox fillHeight="false" prefWidth="100.0">
+                           <children>
+                              <Label prefHeight="26.0" prefWidth="360.0" text="Files folder" />
+                              <TextField prefHeight="26.0" prefWidth="180.0" />
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="5.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <ButtonBar prefHeight="40.0" prefWidth="200.0">
+                          <buttons>
+                              <Button onAction="#handleLoad" mnemonicParsing="false" text="Load" />
+                              <Button onAction="#handleSend" mnemonicParsing="false" text="Send All" />
+                          </buttons>
+                        </ButtonBar>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="0.0" prefWidth="0.0">
+               <children>
+                  <TableView fx:id="taskTable" prefHeight="300.0" prefWidth="540.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <columns>
+                      <TableColumn fx:id="taskNameColumn" prefWidth="82.0" text="Task" />
+                      <TableColumn fx:id="taskStatusColumn" minWidth="6.0" prefWidth="79.0" text="Status" />
+                    </columns>
+                  </TableView>
+               </children>
+            </AnchorPane>
+         </children>
       </VBox>
    </children>
 </AnchorPane>
