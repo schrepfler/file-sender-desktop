@@ -1,11 +1,11 @@
 package filesender
 
 import akka.actor._
+
 import scala.concurrent.duration._
 import scala.language.postfixOps
-
-import scalafx.application.{Platform, JFXApp}
 import scalafx.application.JFXApp.PrimaryStage
+import scalafx.application.{JFXApp, Platform}
 
 object FileSenderApp extends JFXApp {
 

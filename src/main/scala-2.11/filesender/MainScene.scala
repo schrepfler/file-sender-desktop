@@ -1,12 +1,12 @@
 package filesender
 
+import akka.actor._
+
 import scala.collection.mutable
 import scalafx.beans.property.StringProperty
 import scalafx.event.ActionEvent
 import scalafx.scene.control.{TableColumn, TableView}
 import scalafxml.core.macros.sfxml
-
-import akka.actor._
 
 
 class TaskRow(initialName: String, initialStatus: String) {

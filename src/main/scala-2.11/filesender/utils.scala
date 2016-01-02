@@ -3,7 +3,7 @@ package filesender
 import java.io.IOException
 import javafx.{scene => jfxs}
 
-import akka.actor.{ActorRef, ActorContext}
+import akka.actor.{ActorContext, ActorRef}
 
 import scalafx.Includes._
 import scalafx.scene.Scene

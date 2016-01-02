@@ -1,10 +1,11 @@
 package filesender
 
-import akka.dispatch.{DispatcherPrerequisites, ExecutorServiceFactory, ExecutorServiceConfigurator}
-import com.typesafe.config.Config
-import java.util.concurrent.{ExecutorService, AbstractExecutorService, ThreadFactory, TimeUnit}
 import java.util.Collections
+import java.util.concurrent.{AbstractExecutorService, ExecutorService, ThreadFactory, TimeUnit}
 import javafx.application.Platform
+
+import akka.dispatch.{DispatcherPrerequisites, ExecutorServiceConfigurator, ExecutorServiceFactory}
+import com.typesafe.config.Config
 
 // First we wrap invokeLater/runLater as an ExecutorService
 abstract class GUIExecutorService extends AbstractExecutorService {
