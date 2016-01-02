@@ -60,6 +60,9 @@ class MainPresenterActor(sceneContext: SceneContext[MainController]) extends Act
     case unexpectedMessage: Any =>
       log.debug("Received unexpected message: {}", unexpectedMessage)
       throw new Exception("Can't handle %s".format(unexpectedMessage))
+    case _ =>
+      log.debug("Received unexpected object as message.")
+      throw new Exception("Can't handle a non message object")
   }
   // Outbound
   sceneContext.controller.subscribeToSend(
