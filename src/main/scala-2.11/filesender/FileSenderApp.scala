@@ -49,7 +49,7 @@ class Terminator(app: ActorRef) extends Actor with ActorLogging {
   context watch app
 
   def receive = {
-    case Terminated(_) ⇒
+    case Terminated(_) =>
       log.info("application supervisor has terminated, shutting down")
       if (!Platform.isFxApplicationThread) log.warning("Terminator actor is not running in the GUI thread!")
       context.system.terminate()
