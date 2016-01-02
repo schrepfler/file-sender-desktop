@@ -28,7 +28,7 @@ object JavaFXExecutorService extends GUIExecutorService {
 
 // Then we create an ExecutorServiceConfigurator so that Akka can use our JavaFXExecutorService for the dispatchers
 class JavaFXEventThreadExecutorServiceConfigurator(config: Config, prerequisites: DispatcherPrerequisites) extends ExecutorServiceConfigurator(config, prerequisites) {
-  private val f = new ExecutorServiceFactory {
+  private[this] val f = new ExecutorServiceFactory {
     def createExecutorService: ExecutorService = JavaFXExecutorService
   }
 
