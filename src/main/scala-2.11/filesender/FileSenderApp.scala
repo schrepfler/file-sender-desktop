@@ -57,5 +57,8 @@ class Terminator(app: ActorRef) extends Actor with ActorLogging {
       if (!Platform.isFxApplicationThread) log.warning("Terminator actor is not running in the GUI thread!")
       context.system.terminate()
       Platform.exit()
+    case _ =>
+      log.debug("Received unexpected object as message.")
+      throw new Exception("Can't handle a non message object")
   }
 }
