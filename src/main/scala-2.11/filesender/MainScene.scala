@@ -26,22 +26,22 @@ trait MainController {
 class MainControllerImpl(private val taskTable:TableView[TaskRow],
                          private val taskNameColumn:TableColumn[TaskRow, String],
                          private val taskStatusColumn:TableColumn[TaskRow, String]) extends MainController {
-  private val _loadCallbacks = MutableList[Function[ActionEvent, Unit]]()
-  private val _sendCallbacks = MutableList[Function[ActionEvent, Unit]]()
+  private val loadCallbacks = MutableList[Function[ActionEvent, Unit]]()
+  private val sendCallbacks = MutableList[Function[ActionEvent, Unit]]()
 
   taskNameColumn.cellValueFactory = {_.value.name}
   taskStatusColumn.cellValueFactory = {_.value.status}
 
-  def handleLoad(event: ActionEvent) = _loadCallbacks.foreach(_(event))
+  def handleLoad(event: ActionEvent) = loadCallbacks.foreach(_(event))
 
-  def handleSend(event: ActionEvent) = _sendCallbacks.foreach(_(event))
+  def handleSend(event: ActionEvent) = sendCallbacks.foreach(_(event))
 
   def subscribeToLoad(callback: Function[ActionEvent, Unit]) = {
-    _loadCallbacks += callback
+    loadCallbacks += callback
   }
 
   def subscribeToSend(callback: Function[ActionEvent, Unit]) = {
-    _sendCallbacks += callback
+    sendCallbacks += callback
   }
 
   def addTaskRow(taskName: String, taskStatus: String) = {
