@@ -1,5 +1,6 @@
 package filesender
 
+import scala.collection.mutable.MutableList
 import scalafx.beans.property.StringProperty
 import scalafx.event.ActionEvent
 import scalafx.scene.control.{TableColumn, TableView}
@@ -25,8 +26,8 @@ trait MainController {
 class MainControllerImpl(private val taskTable:TableView[TaskRow],
                          private val taskNameColumn:TableColumn[TaskRow, String],
                          private val taskStatusColumn:TableColumn[TaskRow, String]) extends MainController {
-  private var _loadCallbacks = List[Function[ActionEvent, Unit]]()
-  private var _sendCallbacks = List[Function[ActionEvent, Unit]]()
+  private val _loadCallbacks = MutableList[Function[ActionEvent, Unit]]()
+  private val _sendCallbacks = MutableList[Function[ActionEvent, Unit]]()
 
   taskNameColumn.cellValueFactory = {_.value.name}
   taskStatusColumn.cellValueFactory = {_.value.status}
@@ -36,11 +37,11 @@ class MainControllerImpl(private val taskTable:TableView[TaskRow],
   def handleSend(event: ActionEvent) = _sendCallbacks.foreach(_(event))
 
   def subscribeToLoad(callback: Function[ActionEvent, Unit]) = {
-    _loadCallbacks = callback :: _loadCallbacks
+    _loadCallbacks += callback
   }
 
   def subscribeToSend(callback: Function[ActionEvent, Unit]) = {
-    _sendCallbacks = callback :: _sendCallbacks
+    _sendCallbacks += callback
   }
 
   def addTaskRow(taskName: String, taskStatus: String) = {
