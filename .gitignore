@@ -54,3 +54,4 @@ Desktop.ini
 *.iml
 *.iws
 .idea/
+.metals/

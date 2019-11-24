@@ -1,6 +1,8 @@
 package filesender
 
 import akka.actor._
+import javafx.event.EventHandler
+import javafx.stage.WindowEvent
 
 import scala.concurrent.duration._
 import scala.language.postfixOps
@@ -21,6 +23,15 @@ object FileSenderApp extends JFXApp {
   system.scheduler.scheduleOnce(5 seconds){
     main ! AddTaskRow("Time's up!", "Sent")
   }
+
+  stage.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, new EventHandler[WindowEvent] {
+    override def handle(event: WindowEvent): Unit = {
+      main ! PoisonPill.getInstance
+      terminator ! PoisonPill.getInstance
+      system.terminate()
+    }
+  })
+
 }
 
 case class CloseAppCommand()

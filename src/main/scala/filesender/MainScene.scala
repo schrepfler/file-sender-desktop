@@ -26,8 +26,8 @@ trait MainController {
 class MainControllerImpl(private val taskTable:TableView[TaskRow],
                          private val taskNameColumn:TableColumn[TaskRow, String],
                          private val taskStatusColumn:TableColumn[TaskRow, String]) extends MainController {
-  private[this] val loadCallbacks = mutable.MutableList[Function[ActionEvent, Unit]]()
-  private[this] val sendCallbacks = mutable.MutableList[Function[ActionEvent, Unit]]()
+  private[this] val loadCallbacks = mutable.ArrayDeque[Function[ActionEvent, Unit]]()
+  private[this] val sendCallbacks = mutable.ArrayDeque[Function[ActionEvent, Unit]]()
 
   taskNameColumn.cellValueFactory = {_.value.name}
   taskStatusColumn.cellValueFactory = {_.value.status}
